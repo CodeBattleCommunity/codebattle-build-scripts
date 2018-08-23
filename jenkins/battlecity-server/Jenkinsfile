@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout sources') {
+        stage('Checkout sources from GitHub') {
             steps {
                 git branch: 'master',
                     url: 'https://github.com/IzhevskBattleCityDev/codebattle-game-battlecity'
@@ -15,25 +15,21 @@ pipeline {
 //            }
 //        }
 
-        stage('Build Docker-image for battleship server') {
+        stage('Build Docker-image for codebattle-server') {
             steps {
                 sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-deploy-local -f dockerfile/codebattle-deploy-local .'
             }
         }
 
-        stage('Stop running server') {
+        stage('Stop current codebattle-server') {
             steps {
-                try {
-                    sh 'docker stop $(docker ps -a -q --filter ancestor=izhevsk-code-battle/codebattle-deploy-local --format="{{.ID}}")'
-                } catch (e) {
-                    echo "There was no running container."
-                }
+               sh 'docker ps -a -q --filter name=codebattle-server --format="{{.ID}}" | xargs -r docker stop'
             }
         }
 
-        stage('Run battleship') {
+        stage('Run codebattle-server') {
             steps {
-                sh 'docker run -d -p 8080:8080 izhevsk-code-battle/codebattle-deploy-local:latest'
+                sh 'docker run -d -p 8080:8080 --rm --name codebattle-server izhevsk-code-battle/codebattle-deploy-local:latest'
             }
         }
 

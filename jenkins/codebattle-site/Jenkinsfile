@@ -1,0 +1,58 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:8'
+            args "-v /var/jenkins/workspace/codebattle-site:/codebattle-site"
+        }
+    }
+
+    environment {
+        CICD_DEPLOY_FOLDER_VOL = '/codebattle-site'
+    }
+
+    stages {
+        stage('Checkout site sources') {
+            steps {
+                git branch: 'master',
+                        url: 'https://github.com/IzhevskCodeBattle/codebattle-site'
+            }
+        }
+
+        stage('Build dist') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Clean previous CI/CD deployment') {
+            steps {
+                sh "rm -rf ${CICD_DEPLOY_FOLDER_VOL}/*"
+            }
+        }
+
+        stage('Deploy to CI/CD env') {
+            steps {
+                sh "cp -r dist/. ${CICD_DEPLOY_FOLDER_VOL}"
+            }
+        }
+
+        stage('Publish dist to FTP') {
+            steps {
+                sh 'ls -ltr dist/'
+
+                ftpPublisher alwaysPublishFromMaster: true, continueOnError: false, failOnError: false,
+                        masterNodeName: 'MasterNode',
+                        paramPublish: [parameterName: 'FTP_MATCHING_LABELS'],
+                        publishers: [
+                        [configName             : 'CodeBattleFtp', transfers: [
+                                [asciiMode      : false, cleanRemote: false, excludes: '', flatten: false,
+                                 makeEmptyDirs  : false, noDefaultExcludes: false, patternSeparator: '[, ]+',
+                                 remoteDirectory: "/", remoteDirectorySDF: false, removePrefix: 'dist',
+                                 sourceFiles    : 'dist/**/*']
+                        ], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true]
+                ]
+            }
+        }
+    }
+}
