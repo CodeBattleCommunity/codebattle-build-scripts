@@ -23,7 +23,11 @@ pipeline {
 
         stage('Stop running server') {
             steps {
-                sh 'docker stop $(docker ps -a -q --filter ancestor=izhevsk-code-battle/codebattle-deploy-local --format="{{.ID}}")'
+                try {
+                    sh 'docker stop $(docker ps -a -q --filter ancestor=izhevsk-code-battle/codebattle-deploy-local --format="{{.ID}}")'
+                } catch (e) {
+                    echo "There was no running container."
+                }
             }
         }
 
