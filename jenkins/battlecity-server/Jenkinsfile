@@ -22,11 +22,15 @@ pipeline {
         }
 
         stage('Stop running server') {
-            sh 'docker stop $(docker ps -a -q --filter ancestor=izhevsk-code-battle/codebattle-deploy-local --format="{{.ID}}")'
+            steps {
+                sh 'docker stop $(docker ps -a -q --filter ancestor=izhevsk-code-battle/codebattle-deploy-local --format="{{.ID}}")'
+            }
         }
 
         stage('Run battleship') {
-            sh 'docker run -d -p 8080:8080 izhevsk-code-battle/codebattle-deploy-local:latest'
+            steps {
+                sh 'docker run -d -p 8080:8080 izhevsk-code-battle/codebattle-deploy-local:latest'
+            }
         }
 
     }
