@@ -10,6 +10,7 @@ pipeline {
 
         stage('Build base image for codebattle-server') {
             steps {
+                sh 'ls -la'
                 dir ('codebattle-game-battlecity') {
                     sh 'ls -la'
                     sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src -f dockerfile/codebattle-server .'
