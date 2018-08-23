@@ -5,9 +5,16 @@ pipeline {
             steps {
                 git branch: 'master',
                     url: 'https://github.com/IzhevskBattleCityDev/codebattle-game-battlecity'
-
-                sh "ls -lat"
             }
         }
+
+        stage('Build base image for codebattle-server') {
+            steps {
+                dir 'codebattle-game-battlecity'
+                sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src -f dockerfile/codebattle-server .'
+            }
+        }
+
+
     }
 }
