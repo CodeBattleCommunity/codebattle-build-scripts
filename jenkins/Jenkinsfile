@@ -1,0 +1,12 @@
+pipeline {
+    stages {
+        stage('Checkout sources') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/IzhevskBattleCityDev/codebattle-game-battlecity'
+
+                sh "ls -lat"
+            }
+        }
+    }
+}
