@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout sources from GitHub') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/IzhevskBattleCityDev/codebattle-game-battlecity'
+                    url: 'https://github.com/IzhevskCodeBattle/codebattle-game-battlecity'
             }
         }
 
