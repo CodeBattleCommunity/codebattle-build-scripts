@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout site sources') {
             steps {
-                git branch: 'master',
+                git branch: 'main-branch',
                         url: 'https://github.com/IzhevskCodeBattle/codebattle-site'
             }
         }
