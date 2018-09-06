@@ -8,13 +8,6 @@ pipeline {
             }
         }
 
-/*      Needs to be run only once to create base image */
-//        stage('Build base image for codebattle-server') {
-//            steps {
-//                sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src -f dockerfile/codebattle-server .'
-//            }
-//        }
-
         stage('Build Docker-image for codebattle-server') {
             steps {
                 sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-deploy-local -f dockerfile/codebattle-deploy-local .'
