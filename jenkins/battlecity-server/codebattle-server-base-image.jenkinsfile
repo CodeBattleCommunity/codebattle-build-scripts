@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build base image for codebattle-server') {
             steps {
-                sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src -f dockerfile/codebattle-server .'
+                sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src --build-arg REVISION=turn_for_battlecity -f dockerfile/codebattle-server .'
             }
         }
     }
