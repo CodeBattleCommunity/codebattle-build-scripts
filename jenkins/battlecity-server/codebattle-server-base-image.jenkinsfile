@@ -1,17 +1,29 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout sources from GitHub') {
+        stage('Checkout build scripts') {
             steps {
-                git branch: 'master',
-                        url: 'https://github.com/IzhevskCodeBattle/codebattle-game-battlecity'
+                dir('build_scripts') {
+                    git branch: 'master',
+                            url: 'https://github.com/IzhevskCodeBattle/codebattle-build-scripts'
+                }
+            }
+        }
+
+        stage('Checkout codebattle-server sources') {
+            steps {
+                dir('codebattle-server') {
+                    git branch: 'master',
+                            url: 'https://github.com/IzhevskCodeBattle/codebattle-server'
+                }
             }
         }
 
         stage('Build base image for codebattle-server') {
             steps {
-                sh 'docker build --no-cache -t izhevsk-code-battle/codebattle-server-src -f dockerfile/codebattle-server .'
+                sh 'docker build -t izhevsk-code-battle/codebattle-server-src -f build_scripts/jenkins/battlecity-server/docker/codebattle-server-docker-image ./codebattle-server'
             }
         }
+
     }
 }

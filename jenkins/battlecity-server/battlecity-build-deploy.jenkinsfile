@@ -16,15 +16,19 @@ pipeline {
 
         stage('Stop current codebattle-server') {
             steps {
-               sh 'docker ps -a -q --filter name=codebattle-server --format="{{.ID}}" | xargs -r docker stop'
+                script {
+                    try {
+                        sh 'docker ps -a -q --filter name=codebattle-server --format="{{.ID}}" | xargs -r docker stop'
+                    } catch (err) {
+                        echo err
+                    }
+                }
             }
         }
 
         stage('Run codebattle-server') {
             steps {
-                sh 'docker run -d -p 8080:8080 --rm --name codebattle-server ' .
-                        '--mount source=codebattle-database,target=/var/lib/jetty/database ' .
-                        'izhevsk-code-battle/codebattle-deploy-local:latest'
+                sh 'docker run -d -p 8080:8080 --rm --name codebattle-server --user 0:0 --mount source=codebattle-database,target=/var/lib/jetty/database izhevsk-code-battle/codebattle-deploy-local:latest'
             }
         }
 
