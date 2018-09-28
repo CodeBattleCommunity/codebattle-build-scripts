@@ -22,7 +22,9 @@ pipeline {
 
         stage('Run codebattle-server') {
             steps {
-                sh 'docker run -d -p 8080:8080 --rm --name codebattle-server izhevsk-code-battle/codebattle-deploy-local:latest'
+                sh 'docker run -d -p 8080:8080 --rm --name codebattle-server ' .
+                        '--mount source=codebattle-database,target=/var/lib/jetty/database ' .
+                        'izhevsk-code-battle/codebattle-deploy-local:latest'
             }
         }
 
