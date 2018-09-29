@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Stop current codebattle-server') {
+        /*stage('Stop current codebattle-server') {
             steps {
                 script {
                     try {
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 sh 'docker run -d -p 8080:8080 --rm --name codebattle-server --user 0:0 --mount source=codebattle-database,target=/var/lib/jetty/database izhevsk-code-battle/codebattle-deploy-local:latest'
             }
-        }
+        }*/
 
     }
 }
