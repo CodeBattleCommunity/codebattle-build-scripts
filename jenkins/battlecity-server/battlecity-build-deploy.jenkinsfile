@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build Docker-image for codebattle-server') {
             steps {
-                sh 'docker build -t izhevsk-code-battle/codebattle-deploy-local --build-arg GAMES=battlecity,bomberman -f dockerfile/codebattle-deploy-local .'
+                sh "docker build -t izhevsk-code-battle/codebattle-deploy-local:latest -t izhevsk-code-battle/codebattle-deploy-local:${currentBuild.number} --build-arg GAMES=battlecity,bomberman -f dockerfile/codebattle-deploy-local ."
             }
         }
 
